@@ -90,6 +90,19 @@ adb shell "dumpsys activity activities | grep topResumedActivity"
 - LSPosed 2.x（现代 API，`minApiVersion=100` / `targetApiVersion=102`）+ root
 - ColorOS / 一加（实测 ColorOS 16）；其它 ROM 没有「钱包分支」，本模块不适用
 
+## 更新日志
+
+### v1.1.1（当前版本）
+
+- **修复「锁屏双击打开的相机只能拍一张照片」**：厂商「安全相机」的 `mode=29` / `lunch_type=2` 两个 extra 会把 ColorOS 拍照管线切到受限模式（`CF_FOREGROUND_CAPTURE`、预览帧失败）。现在只保留 `caller_package` + `android_camera_launch_type` + `extra_key_caller_package_name`，锁屏可连续拍照。
+- **恢复 `system` 作用域**：`scope.list` 保留 `system`（去掉后模块不再注入 system_server，双击完全没反应）。
+- 锁屏音量键快门兜底改为「快门计数自校准」：仅当相机原生快门未触发时才补点一次，解锁态完全不介入。
+
+### v1.1.0
+
+- 包名改为 `io.github.haperwu.doubletapcamera`（旧包 `io.github.doubletapcamera` 需先卸载）。
+- 锁屏 secure 入口（`STILL_IMAGE_CAMERA_SECURE`）直接盖在锁屏上显示取景界面。
+
 ## 源码
 
 <https://github.com/HaperWu/doubletapcamera> —— 含完整排查手册（600+ 行：`docs/double-tap-power-wallet-hijack.md`）与模块源码。
